@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Data_Base.entities.UserDto;
 import com.example.Data_Base.entities.Users;
 import com.example.Data_Base.service.UserService;
 
@@ -25,7 +26,7 @@ public class UsersController {
 
 	//	Getting Data
 	@GetMapping("/displaying/Users")
-	public List<Users> getUsers(){
+	public List<UserDto> getUsers(){
 		return userService.getAllUsers();
 		
 	}

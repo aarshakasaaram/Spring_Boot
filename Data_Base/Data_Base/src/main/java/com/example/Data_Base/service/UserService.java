@@ -2,13 +2,15 @@ package com.example.Data_Base.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
+import com.example.Data_Base.entities.UserDto;
+import com.example.Data_Base.entities.UserMapper;
 import com.example.Data_Base.entities.Users;
 import com.example.Data_Base.repository.UsersRepository;
 
@@ -18,6 +20,9 @@ public class UserService {
 	
         @Autowired
 	    private UsersRepository usersRepository;
+        @Autowired
+        private UserMapper userMapper;
+        
 
 	    // Create or insert a User
 	    public void insertUser(Users user) {
@@ -33,8 +38,11 @@ public class UserService {
 
 	   
 	    // Get all Users
-	    public List<Users> getAllUsers() {
-	        return usersRepository.findAll();
+	    public List<UserDto> getAllUsers() {
+	    	
+//	    	List<UserDto> userDto = new ArrayList<>();
+	    	
+	        return usersRepository.findAll().stream().map(userMapper :: toDto).collect(Collectors.toList());
 	    }
 
 	    
