@@ -1,6 +1,7 @@
 package com.example.Youtube_RESTAPI.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,14 +57,29 @@ public class MyController {
 		return this.courseService.updateCourse(course);
 	}
 	
+//	
+//	@DeleteMapping("/courses/{Id}")
+//	public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId){
+//		try {
+//			this.courseService.deleteCourse(Long.parseLong(courseId));
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		}catch (Exception e) {
+//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//
+//}
 	
-	@DeleteMapping("/courses/{Id}")
-	public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId){
-		try {
-			this.courseService.deleteCourse(Long.parseLong(courseId));
-			return new ResponseEntity<>(HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	@DeleteMapping("/courses/{courseId}")
+	public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId) {
+	    try {
+	        this.courseService.deleteCourse(Long.parseLong(courseId)); // Try deleting the course
+	        return new ResponseEntity<>(HttpStatus.OK); // Return 200 if successful
+	    } catch (NoSuchElementException e) { // Catch exception for course not found
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 if course doesn't exist
+	    } catch (Exception e) { // Catch other exceptions
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Return 500 for general errors
+	    }
+	}
 
-}}
+
+}
