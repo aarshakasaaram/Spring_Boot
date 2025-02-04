@@ -42,14 +42,18 @@ public class UserService {
 	    	
 //	    	List<UserDto> userDto = new ArrayList<>();
 	    	
-	        return usersRepository.findAll().stream().map(userMapper :: toDto).collect(Collectors.toList());
+	        return usersRepository.findAll()
+	        		.stream()
+	        		.map(userMapper :: toDto).collect(Collectors.toList());
 	    }
 
 	    
 	    
 	    // Update an existing User	    
 	    public void usersUpdate( int id , Users user) {
+	    	
 		   Users usersupdate =  usersRepository.findById((long)id).get();
+		   
 		   usersupdate.setPassword(user.getPassword());
 		   usersupdate.setRegistrationDateTime(user.getRegistrationDateTime());
 		   usersupdate.setUsername(user.getUsername());

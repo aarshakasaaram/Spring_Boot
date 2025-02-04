@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    image: dockerproject/backend
+    container_name: spring-boot-app
+    ports:
+      - "8081:8081"  # Matches Spring Boot server.port
+    environment:
+      SPRING_APPLICATION_NAME: RestApi_project
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/Courses
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Aarsha@prem49
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    depends_on:
+      db:
+        condition: service_healthy  # ✅ Correct syntax
+
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: Courses
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Aarsha@prem49
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "Courses"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    image: dockerproject/reactimage
+    container_name: react-frontend
+    build:
+      context: .  # ✅ Corrected context (previously empty)
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - .:/app
+      - /app/node_modules
